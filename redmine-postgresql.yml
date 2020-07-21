@@ -1,0 +1,30 @@
+version: '3.0'
+services:
+  some-redmine:
+    image:
+      redmine:latest
+    restart:
+      always
+    ports:
+      - 1234:3000
+    environment:
+      REDMINE_DB_POSTGRES: some-postgres
+      REDMINE_DB_DATABASE: redmine
+      REDMINE_DB_USERNAME: redmine
+      REDMINE_DB_PASSWORD: redmine
+    volumes:
+      - /var/lib/some-redmine/files:/usr/src/redmine/files
+      - /var/lib/some-redmine/plugins:/usr/src/redmine/plugins
+      - /var/lib/some-redmine/vendor/plugins:/usr/src/redmine/vendor/plugins
+      - /var/lib/some-redmine/public/themes:/usr/src/redmine/public/themes
+    depends_on:
+      - some-postgres
+  some-postgres:
+    image:
+      postgres:latest
+    environment:
+      POSTGRES_DB: redmine
+      POSTGRES_USER: redmine
+      POSTGRES_PASSWORD: redmine
+    volumes:
+      - /var/lib/some-postgres:/var/lib/postgresql/data
